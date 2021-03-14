@@ -1,0 +1,7 @@
+scapy
+beautifulsoup4
+requests
+pandas
+numpy
+tabulate
+inquirer
