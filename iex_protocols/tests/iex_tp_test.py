@@ -68,5 +68,15 @@ class TestTradingStatusMessage(unittest.TestCase):
         self.assertEqual(b'ZIEXT   ', p.symbol)
         self.assertEqual(b'T1  ', p.reason)
 
+class TestOperationalHaltStatusMessage(unittest.TestCase):
+    def test_op_halt_status_msg(self):
+        d = bytes.fromhex('4f4fac63c02096866d145a49455854202020')
+        p = OperationalHaltStatusMessage(d)
+        print(p)
+        self.assertEqual(b'O', p.messageType)
+        self.assertEqual(ord('O'), p.haltStatus)
+        # self.assertEqual(, p.timestamp) # fixme
+        self.assertEqual(b'ZIEXT   ', p.symbol)
+
 if __name__ == '__main__':
     unittest.main()

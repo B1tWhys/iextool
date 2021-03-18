@@ -89,3 +89,12 @@ class TradingStatusMessage(Packet):
         StrFixedLenField("symbol", None, length=8),
         StrFixedLenField("reason", None, length=4)
     ]
+
+class OperationalHaltStatusMessage(Packet):
+    name = 'OperationalHaltStatusMessage'
+    fields_desc = [
+        StrFixedLenField('messageType', 'O', length=1),
+        ByteEnumField('haltStatus', b'O', {ord('O'): 'O', ord('N'): 'N'}),
+        IEXTimestampField('timestamp', None),
+        StrFixedLenField("symbol", None, length=8)
+    ]
