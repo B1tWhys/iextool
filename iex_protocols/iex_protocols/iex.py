@@ -11,6 +11,9 @@ class IEXPriceField(LESignedLongField):
     def i2repr(self, pkt, x):
         return str(x/10000)
 
+class IEXTimestampField(LESignedLongField):
+    pass # TODO: figure out how to properly handle this
+
 ###########################
 ### IEX Transport
 ###########################
@@ -41,7 +44,7 @@ class IEX_TP(Packet):
         LEFieldLenField("messageCount", None, count_of='messages'),
         LESignedLongField("streamOffset", 0),
         LESignedLongField("firstSequenceNumber", 0),
-        LESignedLongField("timestamp", None),
+        IEXTimestampField("timestamp", None),
         PacketListField("messages", None, MessageBlock, count_from=lambda pkt: pkt.messageCount)
     ]
 
@@ -61,16 +64,16 @@ class SystemEvent(Packet):
 
     name = "SystemEventMessage"
     fields_desc = [
-        StrFixedLenField("messageType", 1, 'S'),
+        StrFixedLenField("messageType", 'S', length=1),
         ByteEnumField("systemEvent", None, _SYSTEM_EVENT_TYPES),
     ]
 
 class SecurityDirectoryMessage(Packet):
     name = "SecurityDirectoryMessage"
     fields_desc = [
-        StrFixedLenField("messageType", 1, 'D'),
-        FlagsField("flags", 0, 8, {7: 'T', 6: 'W', 5: 'E'}),
-        LESignedLongField("timestamp", None),
+        StrFixedLenField("messageType", 'D', length=1),
+        FlagsField("flags", 0, 8, {5: 'E', 6: 'W', 7: 'T'}),
+        IEXTimestampField("timestamp", None),
         StrFixedLenField("symbol", None, length=8),
         LEIntField("roundLotSize", None),
         IEXPriceField("adjustedPocPrice", None),
@@ -80,6 +83,9 @@ class SecurityDirectoryMessage(Packet):
 class TradingStatusMessage(Packet):
     name = "TradingStatusMessage"
     fields_desc = [
-        StrFixedLenField("messageType", 1, 'H'),
-        FlagsField("flags", 0, 8, {7: 'F', 6: 'T', 5: 'I', 4: '8', 3: 'X'}),
+        StrFixedLenField("messageType", 'H', length=1),
+        ByteEnumField("tradingStatus", None, {7: 'F', 6: 'T', 5: 'I', 4: '8', 3: 'X'}),
+        IEXTimestampField("timestamp", None),
+        StrFixedLenField("symbol", None, length=8),
+        StrFixedLenField("reason", None, length=4)
     ]

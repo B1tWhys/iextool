@@ -51,21 +51,22 @@ class TestMessageBlock(unittest.TestCase):
 class TestSecurityDirectoryMessage(unittest.TestCase):
     def test_security_directorymessage(self):
         d = bytes.fromhex('44800020897b5a1fb6145a4945585420202064000000241d0f000000000001')
-        d = b'\x1e\x00\x38\x01\xac\x63\xc0\x20\x96\x86\x6d\x14\x5a\x49\x45\x58\x54\x20\x20\x20\xe4\x25\x00\x00\x24\x1d\x0f\x00\x00\x00\x00\x00'
         p = SecurityDirectoryMessage(d)
-        # p = MessageBlock(d)
         print(p)
-        self.assertEqual(ord('D'), p.messageType)
+        self.assertEqual(b'D', p.messageType)
         self.assertEqual('T', p.flags)
-        self.assertEqual(1234, p.timestamp)
+        self.assertEqual(1492414800000000000, p.timestamp)
 
 class TestTradingStatusMessage(unittest.TestCase):
     def test_trading_status_message(self):
-        d = bytes.fromhex('4848ac63c02096866d14')
+        d = bytes.fromhex('4848ac63c02096866d145a4945585420202054312020')
         p = TradingStatusMessage(d)
         print(p)
-        self.assertEqual('H', p.messageType)
-        self.assertEqual(p.tradingStatus)
+        self.assertEqual(b'H', p.messageType)
+        self.assertEqual(ord('H'), p.tradingStatus)
+        # self.assertEqual(, p.timestamp) # fixme
+        self.assertEqual(b'ZIEXT   ', p.symbol)
+        self.assertEqual(b'T1  ', p.reason)
 
 if __name__ == '__main__':
     unittest.main()
