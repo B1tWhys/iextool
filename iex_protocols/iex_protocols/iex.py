@@ -108,3 +108,12 @@ class ShortSaleTestPriceStatus(Packet):
         StrFixedLenField("symbol", None, length=8),
         ByteEnumField('detail', None, {ord(' '): 'None', ord('A'): 'Activated', b'C': 'Continued', b'D': 'Deactivated', b'N': 'Detail Unavailable'})
     ]
+
+class SecurityEventMessage(Packet):
+    name = 'SecurityEventMessage'
+    fields_desc = [
+        StrFixedLenField('messageType', 'E', length=1),
+        ByteEnumField('securityEvent', ord('O'), {ord('O'): 'Opening Process Complete', ord('C'): 'Closing Process Complete'}),
+        IEXTimestampField('timestamp', None),
+        StrFixedLenField("symbol", None, length=8)
+    ]

@@ -88,5 +88,15 @@ class TestShortSaleTestPriceStatus(unittest.TestCase):
         # self.assertEqual(, p.timestamp) # fixme
         self.assertEqual(ord('A'), p.detail)
 
+class TestSecurityEventMessage(unittest.TestCase):
+    def test_security_event_message(self):
+        d = bytes.fromhex('454f00f0302a5b25b6145a49455854202020')
+        p = SecurityEventMessage(d)
+        print(repr(p))
+        self.assertEqual(b'E', p.messageType)
+        self.assertEqual(ord('O'), p.securityEvent)
+        # self.assertEqual(, p.timestamp) # fixme
+        self.assertEqual(b'ZIEXT   ', p.symbol)
+
 if __name__ == '__main__':
     unittest.main()
