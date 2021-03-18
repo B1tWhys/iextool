@@ -98,3 +98,13 @@ class OperationalHaltStatusMessage(Packet):
         IEXTimestampField('timestamp', None),
         StrFixedLenField("symbol", None, length=8)
     ]
+
+class ShortSaleTestPriceStatus(Packet):
+    name = 'ShortSalePriceTestStatusMessage'
+    fields_desc = [
+        StrFixedLenField('messageType', 'P', length=1),
+        ByteEnumField('shortSalePriceTestStatus', 0, {0: False, 1: True}),
+        IEXTimestampField('timestamp', None),
+        StrFixedLenField("symbol", None, length=8),
+        ByteEnumField('detail', None, {ord(' '): 'None', ord('A'): 'Activated', b'C': 'Continued', b'D': 'Deactivated', b'N': 'Detail Unavailable'})
+    ]

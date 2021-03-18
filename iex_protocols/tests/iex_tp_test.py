@@ -52,7 +52,7 @@ class TestSecurityDirectoryMessage(unittest.TestCase):
     def test_security_directorymessage(self):
         d = bytes.fromhex('44800020897b5a1fb6145a4945585420202064000000241d0f000000000001')
         p = SecurityDirectoryMessage(d)
-        print(p)
+        print(repr(p))
         self.assertEqual(b'D', p.messageType)
         self.assertEqual('T', p.flags)
         self.assertEqual(1492414800000000000, p.timestamp)
@@ -61,7 +61,7 @@ class TestTradingStatusMessage(unittest.TestCase):
     def test_trading_status_message(self):
         d = bytes.fromhex('4848ac63c02096866d145a4945585420202054312020')
         p = TradingStatusMessage(d)
-        print(p)
+        print(repr(p))
         self.assertEqual(b'H', p.messageType)
         self.assertEqual(ord('H'), p.tradingStatus)
         # self.assertEqual(, p.timestamp) # fixme
@@ -72,11 +72,21 @@ class TestOperationalHaltStatusMessage(unittest.TestCase):
     def test_op_halt_status_msg(self):
         d = bytes.fromhex('4f4fac63c02096866d145a49455854202020')
         p = OperationalHaltStatusMessage(d)
-        print(p)
+        print(repr(p))
         self.assertEqual(b'O', p.messageType)
         self.assertEqual(ord('O'), p.haltStatus)
         # self.assertEqual(, p.timestamp) # fixme
         self.assertEqual(b'ZIEXT   ', p.symbol)
+
+class TestShortSaleTestPriceStatus(unittest.TestCase):
+    def test_short_sale_test_price_status(self):
+        d = bytes.fromhex('5001ac63c02096866d145a4945585420202041')
+        p = ShortSaleTestPriceStatus(d)
+        print(repr(p))
+        self.assertEqual(b'P', p.messageType)
+        self.assertEqual(True, p.shortSalePriceTestStatus)
+        # self.assertEqual(, p.timestamp) # fixme
+        self.assertEqual(ord('A'), p.detail)
 
 if __name__ == '__main__':
     unittest.main()
